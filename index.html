@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal Kesiswaan &bull; Al-Wildan Islamic School 20 Mataram</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { navy: '#1E3A5F', secondary: '#4F8EF7', accent: '#10B981', bglight: '#F8FAFC' },
+                    fontFamily: { heading: ['"Plus Jakarta Sans"', 'sans-serif'], body: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
+        h1, h2, h3, h4, h5 { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .card-custom { border-radius: 16px; box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.04), 0 2px 6px -4px rgba(0, 0, 0, 0.03); transition: all 0.2s ease; }
+        
+        /* Peningkatan Tampilan Menu Timbul & Efek Klik */
+        .sidebar-item { 
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            background-color: #FFFFFF;
+        }
+        .dark .sidebar-item {
+            background-color: #1e293b;
+            border-color: rgba(51, 65, 85, 0.6);
+        }
+        .sidebar-item:hover { 
+            background: linear-gradient(to right, rgba(79, 142, 247, 0.08), rgba(30, 58, 95, 0.05));
+            color: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .sidebar-item:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+        }
+        .sidebar-item.active { 
+            background: linear-gradient(135deg, #1E3A5F 0%, #0f172a 100%);
+            color: #FFFFFF;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.25);
+            transform: translateY(0px);
+        }
+        .sidebar-item.active i {
+            color: #60a5fa !important;
+        }
+    </style>
+</head>
+<body class="bg-bglight dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+    <div class="min-h-screen flex flex-col flex-grow">
+        <!-- HEADER -->
+        <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-700 sticky top-0 z-40 shadow-xs">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-navy text-white flex items-center justify-center font-heading font-extrabold shadow-sm overflow-hidden border border-slate-200 flex-shrink-0">
+                        <img src="logo AW 20.jpg" alt="Logo Al-Wildan 20" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <span style="display:none;" class="text-xs">AW</span>
+                    </div>
+                    <div>
+                        <h1 class="font-heading font-extrabold text-xs sm:text-base tracking-tight text-navy dark:text-white">AL-WILDAN ISLAMIC SCHOOL 20 MATARAM</h1>
+                        <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400">Jurnal Kesiswaan &bull; Sistem Layanan Terpadu Pembinaan</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-4 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-700/50 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div class="flex items-center space-x-1.5">
+                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-500"></i>
+                        <span id="widgetTanggal">Memuat...</span>
+                    </div>
+                    <span class="text-slate-300 dark:text-slate-600">|</span>
+                    <div class="flex items-center space-x-1.5">
+                        <i data-lucide="clock" class="w-3.5 h-3.5 text-indigo-500"></i>
+                        <span id="widgetJam">00:00:00</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- LAYOUT UTAMA -->
+        <div class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row gap-6 items-start">
+            
+            <!-- SIDEBAR -->
+            <aside class="w-full md:w-72 flex-shrink-0 space-y-4">
+                <div class="card-custom bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 p-4 space-y-2 shadow-sm">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-3 pb-1">Menu Navigasi</p>
+                    
+                    <button onclick="pilihMenu('Input Pelanggaran')" id="btnMenu-Input Pelanggaran" class="sidebar-item w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 text-left">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-500 flex-shrink-0"></i>
+                        <span class="truncate">Input Pelanggaran Siswa</span>
+                    </button>
+
+                    <button onclick="pilihMenu('Tambah Siswa')" id="btnMenu-Tambah Siswa" class="sidebar-item w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 text-left">
+                        <i data-lucide="user-plus" class="w-4 h-4 text-indigo-500 flex-shrink-0"></i>
+                        <span class="truncate">Tambah & Data Siswa</span>
+                    </button>
+
+                    <button onclick="pilihMenu('Master Pelanggaran')" id="btnMenu-Master Pelanggaran" class="sidebar-item w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 text-left">
+                        <i data-lucide="settings" class="w-4 h-4 text-blue-500 flex-shrink-0"></i>
+                        <span class="truncate">Master Pelanggaran</span>
+                    </button>
+
+                    <button onclick="pilihMenu('Laporan Kesiswaan')" id="btnMenu-Laporan Kesiswaan" class="sidebar-item w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 text-left">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4 text-purple-500 flex-shrink-0"></i>
+                        <span class="truncate">Laporan Kesiswaan</span>
+                    </button>
+
+                    <button onclick="pilihMenu('Hapus dan Reset Data')" id="btnMenu-Hapus dan Reset Data" class="sidebar-item w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 text-left">
+                        <i data-lucide="trash-2" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
+                        <span class="truncate">Hapus & Reset</span>
+                    </button>
+                </div>
+            </aside>
+
+            <!-- KONTEN UTAMA -->
+            <main class="flex-grow w-full space-y-6 min-w-0">
+                <!-- BANNER KOMITMEN KEDISPLINAN (Warna Biru Dongker Gradasi) -->
+                <div class="card-custom bg-gradient-to-r from-blue-950 via-navy to-indigo-900 text-white p-5 sm:p-6 shadow-sm border border-slate-700/50 flex items-center space-x-4">
+                    <div class="p-3 bg-white/10 rounded-xl backdrop-blur-md text-amber-400 flex-shrink-0 shadow-inner">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <!-- Teks Kedisiplinan dengan Gradasi Biru Dongker ke Terang -->
+                        <h4 class="font-heading font-bold text-sm sm:text-base bg-gradient-to-r from-sky-200 via-blue-100 to-white bg-clip-text text-transparent tracking-tight">
+                            Komitmen Kedisiplinan & Ketertiban
+                        </h4>
+                        <p class="text-xs text-slate-300 mt-0.5 leading-relaxed font-normal">
+                            "Disiplin adalah fondasi utama dalam mencetak generasi unggul, berakhlak mulia, serta bertanggung jawab di lingkungan Al-Wildan Islamic School 20 Mataram."
+                        </p>
+                    </div>
+                </div>
+
+                <div id="areaKontenMenu" class="space-y-6">
+                    <div class="card-custom bg-white dark:bg-slate-800 p-10 border border-slate-200/80 dark:border-slate-700 text-center space-y-3 shadow-sm">
+                        <div class="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl mx-auto flex items-center justify-center shadow-inner">
+                            <i data-lucide="mouse-pointer-click" class="w-6 h-6"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="font-heading font-bold text-base text-navy dark:text-white">Silakan Pilih Menu di Sidebar Samping</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">Pilih salah satu menu navigasi untuk mengelola data siswa, master pelanggaran, atau melihat rekap laporan.</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzuRdFSuzGVw5fDreZ_WYbaPvPHiNmbbrUwdNhQNcUmgjCXAcK9Rv6yJTH8ut3Dbu2drQ/exec";
+
+        let cacheDataSiswaGlobal = [];
+        let masterPelanggaranData = [];
+        let cacheDataPelanggaranGlobal = [];
+        let tahunAjaranGlobal = "2026/2027";
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            mulaiJamRealtime();
+            await muatDataGlobalAwal();
+            lucide.createIcons();
+        });
+
+        function mulaiJamRealtime() {
+            setInterval(() => {
+                const sekarang = new Date();
+                document.getElementById('widgetJam').innerText = sekarang.toLocaleTimeString('id-ID') + " WITA";
+                document.getElementById('widgetTanggal').innerText = sekarang.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+            }, 1000);
+        }
+
+        async function muatDataGlobalAwal() {
+            try {
+                const resSiswa = await fetch(`${WEB_APP_URL}?action=getDataSiswa`);
+                const jsonSiswa = await resSiswa.json();
+                if (jsonSiswa) {
+                    if (Array.isArray(jsonSiswa)) cacheDataSiswaGlobal = jsonSiswa;
+                    else if (jsonSiswa.data && Array.isArray(jsonSiswa.data)) cacheDataSiswaGlobal = jsonSiswa.data;
+                }
+
+                const resMaster = await fetch(`${WEB_APP_URL}?action=getMasterPelanggaran`);
+                const jsonMaster = await resMaster.json();
+                if (jsonMaster) {
+                    if (Array.isArray(jsonMaster)) masterPelanggaranData = jsonMaster;
+                    else if (jsonMaster.data && Array.isArray(jsonMaster.data)) masterPelanggaranData = jsonMaster.data;
+                    if (jsonMaster.tahunAjaran) tahunAjaranGlobal = jsonMaster.tahunAjaran;
+                }
+
+                const resPelanggaran = await fetch(`${WEB_APP_URL}?action=getDataPelanggaran`);
+                const jsonPelanggaran = await resPelanggaran.json();
+                if (jsonPelanggaran) {
+                    if (Array.isArray(jsonPelanggaran)) cacheDataPelanggaranGlobal = jsonPelanggaran;
+                    else if (jsonPelanggaran.data && Array.isArray(jsonPelanggaran.data)) cacheDataPelanggaranGlobal = jsonPelanggaran.data;
+                }
+            } catch (e) {
+                console.warn("Gagal memuat data dari server:", e);
+            }
+        }
+
+        function updateActiveSidebar(namaMenu) {
+            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+            const btn = document.getElementById(`btnMenu-${namaMenu}`);
+            if (btn) btn.classList.add('active');
+        }
+
+        function tutupMenu() {
+            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('areaKontenMenu').innerHTML = `
+                <div class="card-custom bg-white dark:bg-slate-800 p-10 border border-slate-200/80 dark:border-slate-700 text-center space-y-3 shadow-sm">
+                    <div class="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl mx-auto flex items-center justify-center shadow-inner">
+                        <i data-lucide="mouse-pointer-click" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="font-heading font-bold text-base text-navy dark:text-white">Silakan Pilih Menu di Sidebar Samping</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">Pilih salah satu menu navigasi untuk mengelola data siswa, master pelanggaran, atau melihat rekap laporan.</p>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        async function pilihMenu(namaMenu) {
+            updateActiveSidebar(namaMenu);
+            const area = document.getElementById('areaKontenMenu');
+            await muatDataGlobalAwal();
+
+            if (namaMenu === 'Input Pelanggaran') {
+                let daftarKelasUnik = [...new Set(cacheDataSiswaGlobal.map(s => s.kelas))].filter(Boolean).sort();
+                let opsiKelas = daftarKelasUnik.length > 0
+                    ? daftarKelasUnik.map(k => `<option value="${k}">${k}</option>`).join('')
+                    : `<option value="">-- Tidak ada data kelas (Cek Sheet Data_Siswa) --</option>`;
+
+                let opsiPelanggaranList = masterPelanggaranData.length > 0 
+                    ? masterPelanggaranData.map(p => `<option value="${p.nama}" data-kategori="${p.kategori}">[${p.kategori}] ${p.nama}</option>`).join('')
+                    : '';
+
+                area.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-5 card-custom border border-slate-200/80 dark:border-slate-700 shadow-sm">
+                            <div>
+                                <h2 class="font-heading font-extrabold text-lg text-navy dark:text-white">Form Input Pelanggaran Siswa</h2>
+                                <p class="text-xs text-slate-500">Data otomatis tersimpan ke Sheet Pelanggaran.</p>
+                            </div>
+                            <button onclick="tutupMenu()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 rounded-xl text-xs font-semibold cursor-pointer">Tutup</button>
+                        </div>
+                        <form onsubmit="kirimDataPelanggaran(event)" class="card-custom bg-white dark:bg-slate-800 p-6 border border-slate-200/80 dark:border-slate-700 space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Tahun Ajaran (Otomatis)</label>
+                                    <input type="text" id="inputTahunAjaran" value="${tahunAjaranGlobal}" readonly class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 text-xs text-slate-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Guru Pelapor *</label>
+                                    <input type="text" id="inputNamaGuru" required placeholder="Masukkan Nama Anda" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Pilih Kelas *</label>
+                                    <select id="inputPilihKelas" required onchange="filterSiswaByKelas(this.value)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
+                                        <option value="">-- Pilih Kelas --</option>
+                                        ${opsiKelas}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Siswa *</label>
+                                    <select id="inputNamaSiswa" required disabled class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 text-xs text-slate-400">
+                                        <option value="">-- Pilih Kelas Dahulu --</option>
+                                    </select>
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Pilih / Ketik Pelanggaran *</label>
+                                    <div class="space-y-2">
+                                        <input type="text" id="cariPelanggaranInput" oninput="filterMasterPelanggaranList(this.value)" placeholder="🔍 Ketik untuk mencari pelanggaran..." class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
+                                        <select id="inputJenisPelanggaran" required size="4" onchange="pilihPelanggaranDropdown(this)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
+                                            ${opsiPelanggaranList}
+                                        </select>
+                                        <p class="text-[11px] text-slate-400">Atau tulis manual pelanggaran baru jika belum ada pada daftar:</p>
+                                        <div class="flex flex-col sm:flex-row gap-2">
+                                            <input type="text" id="inputManualPelanggaran" placeholder="Tulis pelanggaran baru manual..." class="flex-grow px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
+                                            <select id="inputManualKategori" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs font-semibold">
+                                                <option value="Ringan">Ringan</option>
+                                                <option value="Sedang">Sedang</option>
+                                                <option value="Berat">Berat</option>
+                                            </select>
+                                            <button type="button" onclick="tambahMasterBaruManual()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer">Simpan ke Master</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Kategori (Otomatis)</label>
+                                    <input type="text" id="inputKategori" readonly placeholder="Otomatis dari master" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 text-xs text-slate-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Status Penanganan *</label>
+                                    <select id="inputStatus" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs font-semibold">
+                                        <option value="In Progress" class="text-amber-600">⏳ In Progress (Belum Selesai)</option>
+                                        <option value="Resolved" class="text-emerald-600">✅ Resolved (Selesai / Ditindaklanjuti)</option>
+                                    </select>
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Tindakan / Keterangan *</label>
+                                    <textarea id="inputTindakan" required rows="2" placeholder="Tindakan yang diberikan (misal: Teguran lisan / Pemanggilan orang tua)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs"></textarea>
+                                </div>
+                            </div>
+                            <div class="flex justify-end pt-2">
+                                <button type="submit" id="btnSimpan" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer">Simpan Pelanggaran</button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+            } else if (namaMenu === 'Tambah Siswa') {
+                let daftarSiswaTableHTML = cacheDataSiswaGlobal.length > 0
+                    ? cacheDataSiswaGlobal.map((s, idx) => `
+                        <tr class="border-b border-slate-100 dark:border-slate-700 text-xs hover:bg-slate-50/50 dark:hover:bg-slate-700/20">
+                            <td class="py-2.5 px-4 font-semibold">${idx + 1}</td>
+                            <td class="py-2.5 px-4">${s.nisn || '-'}</td>
+                            <td class="py-2.5 px-4 font-medium">${s.nama || '-'}</td>
+                            <td class="py-2.5 px-4">${s.kelas || '-'}</td>
+                        </tr>
+                    `).join('')
+                    : `<tr><td colspan="4" class="text-center py-4 text-slate-400 text-xs">Belum ada data siswa yang termuat.</td></tr>`;
+
+                area.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-5 card-custom border border-slate-200/80 dark:border-slate-700 shadow-sm">
+                            <div>
+                                <h2 class="font-heading font-extrabold text-lg text-navy dark:text-white">Manajemen Data Siswa</h2>
+                                <p class="text-xs text-slate-500">Tambah data siswa baru ke Google Sheet.</p>
+                            </div>
+                            <button onclick="tutupMenu()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 rounded-xl text-xs font-semibold cursor-pointer">Tutup</button>
+                        </div>
+                        <form onsubmit="simpanSiswaBaru(event)" class="card-custom bg-white dark:bg-slate-800 p-6 border border-slate-200/80 dark:border-slate-700 space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">NISN *</label>
+                                    <input type="text" id="inputNisn" required placeholder="Masukkan NISN" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Kelas *</label>
+                                    <input type="text" id="inputKelasSiswa" required placeholder="Contoh: 10 IPA 1" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap Siswa *</label>
+                                    <input type="text" id="inputNamaSiswaBaru" required placeholder="Masukkan nama lengkap" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
+                                </div>
+                            </div>
+                            <div class="flex justify-end"><button type="submit" id="btnSimpanSiswa" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer">Simpan Data Siswa</button></div>
+                        </form>
+
+                        <div class="card-custom bg-white dark:bg-slate-800 p-6 border border-slate-200/80 dark:border-slate-700 space-y-3">
+                            <h3 class="font-heading font-bold text-sm text-navy dark:text-white">Daftar Siswa Tersimpan di Server (${cacheDataSiswaGlobal.length})</h3>
+                            <div class="overflow-x-auto max-h-64">
+                                <table class="w-full text-left border-collapse min-w-[400px]">
+                                    <thead>
+                                        <tr class="border-b border-slate-200 dark:border-slate-700 text-xs text-slate-400 font-bold uppercase">
+                                            <th class="py-2 px-4">No</th>
+                                            <th class="py-2 px-4">NISN</th>
+                                            <th class="py-2 px-4">Nama Siswa</th>
+                                            <th class="py-2 px-4">Kelas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>${daftarSiswaTableHTML}</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (namaMenu === 'Master Pelanggaran') {
+                let listMasterHTML = masterPelanggaranData.length > 0 
+                    ? masterPelanggaranData.map((m, idx) => `
+                        <tr class="border-b border-slate-100 dark:border-slate-700 text-xs hover:bg-slate-50/50 dark:hover:bg-slate-700/20">
+                            <td class="py-3 px-4 font-semibold">${idx + 1}</td>
+                            <td class="py-3 px-4">${m.nama}</td>
+                            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded-full font-medium ${m.kategori==='Ringan'?'bg-emerald-50 text-emerald-600':m.kategori==='Sedang'?'bg-amber-50 text-amber-600':'bg-rose-50 text-rose-600'}">${m.kategori}</span></td>
+                        </tr>
+                    `).join('')
+                    : `<tr><td colspan="3" class="py-4 text-center text-slate-400 text-xs">Belum ada data master pelanggaran.</td></tr>`;
+
+                area.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-5 card-custom border border-slate-200/80 dark:border-slate-700 shadow-sm">
+                            <h2 class="font-heading font-extrabold text-lg text-navy dark:text-white">Master Pelanggaran</h2>
+                            <button onclick="tutupMenu()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 rounded-xl text-xs font-semibold cursor-pointer">Tutup</button>
+                        </div>
+                        <div class="card-custom bg-white dark:bg-slate-800 p-6 border border-slate-200/80 dark:border-slate-700 space-y-4">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse min-w-[350px]">
+                                    <thead>
+                                        <tr class="border-b border-slate-200 dark:border-slate-700 text-xs text-slate-400 font-bold uppercase tracking-wider">
+                                            <th class="py-2.5 px-4">No</th>
+                                            <th class="py-2.5 px-4">Jenis Pelanggaran</th>
+                                            <th class="py-2.5 px-4">Kategori</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>${listMasterHTML}</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (namaMenu === 'Laporan Kesiswaan') {
+                let daftarKelasUnik = [...new Set(cacheDataSiswaGlobal.map(s => s.kelas))].filter(Boolean).sort();
+                let opsiKelasFilter = daftarKelasUnik.map(k => `<option value="${k}">${k}</option>`).join('');
+
+                area.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-5 card-custom border border-slate-200/80 dark:border-slate-700 shadow-sm">
+                            <h2 class="font-heading font-extrabold text-lg text-navy dark:text-white">Portal Laporan Kesiswaan</h2>
+                            <button onclick="tutupMenu()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 rounded-xl text-xs font-semibold cursor-pointer">Tutup</button>
+                        </div>
+
+                        <div class="card-custom bg-white dark:bg-slate-800 p-5 border border-slate-200/80 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-500 mb-1">Pilih Kelas</label>
+                                <select id="filterLapKelas" onchange="updateSiswaLaporan(this.value); renderLaporanKesiswaan();" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700">
+                                    <option value="">Semua Kelas</option>
+                                    ${opsiKelasFilter}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-500 mb-1">Pilih Siswa</label>
+                                <select id="filterLapSiswa" onchange="renderLaporanKesiswaan()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700">
+                                    <option value="">Semua Siswa</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-500 mb-1">Pilih Pekan</label>
+                                <select id="filterLapPekan" onchange="renderLaporanKesiswaan()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700">
+                                    <option value="">Semua Pekan</option>
+                                    <option value="1">Pekan 1</option>
+                                    <option value="2">Pekan 2</option>
+                                    <option value="3">Pekan 3</option>
+                                    <option value="4">Pekan 4</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-500 mb-1">Waktu (Bulan/Tahun)</label>
+                                <input type="month" id="filterLapBulan" onchange="renderLaporanKesiswaan()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700">
+                            </div>
+                        </div>
+
+                        <div class="card-custom bg-white dark:bg-slate-800 p-6 border border-slate-200/80 dark:border-slate-700 space-y-3">
+                            <h3 class="font-heading font-bold text-sm text-navy dark:text-white">Grafik Trend Pelanggaran Global</h3>
+                            <div class="w-full h-64"><canvas id="chartTrendPelanggaran"></canvas></div>
+                        </div>
+
+                        <div class="card-custom bg-white dark:bg-slate-800 p-6 border border-slate-200/80 dark:border-slate-700 space-y-4">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                                <h3 class="font-heading font-bold text-sm text-navy dark:text-white">Akumulasi Pelanggaran per Siswa</h3>
+                                <div class="flex gap-2">
+                                    <button onclick="downloadLaporan('pdf')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 transition-all cursor-pointer"><i data-lucide="file-text" class="w-3.5 h-3.5"></i> PDF</button>
+                                    <button onclick="downloadLaporan('word')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 transition-all cursor-pointer"><i data-lucide="file-down" class="w-3.5 h-3.5"></i> Word</button>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse min-w-[500px]" id="tabelRekapAkumulasi">
+                                    <thead>
+                                        <tr class="border-b border-slate-200 dark:border-slate-700 text-xs text-slate-400 font-bold uppercase tracking-wider">
+                                            <th class="py-2.5 px-4">No</th>
+                                            <th class="py-2.5 px-4">Nama Siswa</th>
+                                            <th class="py-2.5 px-4">Kelas</th>
+                                            <th class="py-2.5 px-4">Ringan</th>
+                                            <th class="py-2.5 px-4">Sedang</th>
+                                            <th class="py-2.5 px-4">Berat</th>
+                                            <th class="py-2.5 px-4">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyRekapAkumulasi"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                renderLaporanKesiswaan();
+            } else if (namaMenu === 'Hapus dan Reset Data') {
+                area.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-5 card-custom border border-slate-200/80 dark:border-slate-700 shadow-sm">
+                            <h2 class="font-heading font-extrabold text-lg text-navy dark:text-white">Reset & Pembersihan Data</h2>
+                            <button onclick="tutupMenu()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 rounded-xl text-xs font-semibold cursor-pointer">Tutup</button>
+                        </div>
+                        <div class="card-custom bg-white dark:bg-slate-800 p-6 border border-slate-200/80 dark:border-slate-700 space-y-4">
+                            <button onclick="localStorage.clear(); alert('Cache lokal dibersihkan.');" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer">Reset Cache Browser</button>
+                        </div>
+                    </div>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        function filterSiswaByKelas(selectedKelas) {
+            const selectSiswa = document.getElementById('inputNamaSiswa');
+            if (!selectedKelas) {
+                selectSiswa.innerHTML = `<option value="">-- Pilih Kelas Dahulu --</option>`;
+                selectSiswa.disabled = true;
+                return;
+            }
+            const siswaFiltered = cacheDataSiswaGlobal.filter(s => s.kelas === selectedKelas);
+            let opsi = `<option value="">-- Pilih Nama Siswa --</option>`;
+            if (siswaFiltered.length > 0) {
+                opsi += siswaFiltered.map(s => `<option value="${s.nama}">${s.nama} (NISN: ${s.nisn || '-'})</option>`).join('');
+            } else {
+                opsi += `<option value="" disabled>Tidak ada siswa di kelas ini</option>`;
+            }
+            selectSiswa.innerHTML = opsi;
+            selectSiswa.disabled = false;
+        }
+
+        function filterMasterPelanggaranList(keyword) {
+            const selectEl = document.getElementById('inputJenisPelanggaran');
+            const filtered = masterPelanggaranData.filter(p => p.nama.toLowerCase().includes(keyword.toLowerCase()));
+            selectEl.innerHTML = filtered.map(p => `<option value="${p.nama}" data-kategori="${p.kategori}">[${p.kategori}] ${p.nama}</option>`).join('');
+        }
+
+        function pilihPelanggaranDropdown(selectEl) {
+            const selectedOption = selectEl.options[selectEl.selectedIndex];
+            if (selectedOption) {
+                const kategori = selectedOption.getAttribute('data-kategori') || '';
+                document.getElementById('inputKategori').value = kategori;
+                document.getElementById('inputManualPelanggaran').value = '';
+            }
+        }
+
+        async function tambahMasterBaruManual() {
+            const namaBaru = document.getElementById('inputManualPelanggaran').value.trim();
+            const kategoriBaru = document.getElementById('inputManualKategori').value;
+            if (!namaBaru) {
+                alert("Silakan ketik nama pelanggaran manual terlebih dahulu.");
+                return;
+            }
+
+            const payload = { action: "tambahMasterPelanggaran", nama: namaBaru, kategori: kategoriBaru };
+
+            try {
+                const response = await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) });
+                const result = await response.json();
+                if (result.status === "success") {
+                    alert("Pelanggaran baru berhasil disimpan ke MasterPelanggaran!");
+                    masterPelanggaranData.push({ nama: namaBaru, kategori: kategoriBaru });
+                    document.getElementById('inputJenisPelanggaran').innerHTML += `<option value="${namaBaru}" data-kategori="${kategoriBaru}">[${kategoriBaru}] ${namaBaru}</option>`;
+                    document.getElementById('inputJenisPelanggaran').value = namaBaru;
+                    document.getElementById('inputKategori').value = kategoriBaru;
+                    document.getElementById('inputManualPelanggaran').value = '';
+                } else {
+                    alert("Gagal menyimpan master pelanggaran.");
+                }
+            } catch (err) {
+                alert("Kesalahan jaringan.");
+            }
+        }
+
+        function updateSiswaLaporan(kelas) {
+            const selectSiswa = document.getElementById('filterLapSiswa');
+            const filtered = kelas ? cacheDataSiswaGlobal.filter(s => s.kelas === kelas) : cacheDataSiswaGlobal;
+            selectSiswa.innerHTML = `<option value="">Semua Siswa</option>` + filtered.map(s => `<option value="${s.nama}">${s.nama}</option>`).join('');
+        }
+
+        function renderLaporanKesiswaan() {
+            const kelasF = document.getElementById('filterLapKelas').value;
+            const siswaF = document.getElementById('filterLapSiswa').value;
+
+            let filteredData = cacheDataPelanggaranGlobal;
+            if (kelasF) filteredData = filteredData.filter(d => d.kelas === kelasF);
+            if (siswaF) filteredData = filteredData.filter(d => d.namaSiswa === siswaF);
+
+            let rekapMap = {};
+            cacheDataSiswaGlobal.forEach(s => {
+                if (!kelasF || s.kelas === kelasF) {
+                    rekapMap[s.nama] = { nama: s.nama, kelas: s.kelas, Ringan: 0, Sedang: 0, Berat: 0, Total: 0 };
+                }
+            });
+
+            filteredData.forEach(d => {
+                if (rekapMap[d.namaSiswa]) {
+                    if (d.kategori === 'Ringan') rekapMap[d.namaSiswa].Ringan++;
+                    if (d.kategori === 'Sedang') rekapMap[d.namaSiswa].Sedang++;
+                    if (d.kategori === 'Berat') rekapMap[d.namaSiswa].Berat++;
+                    rekapMap[d.namaSiswa].Total++;
+                }
+            });
+
+            let tbodyHTML = '';
+            let idx = 1;
+            for (let k in rekapMap) {
+                let item = rekapMap[k];
+                tbodyHTML += `
+                    <tr class="border-b border-slate-100 dark:border-slate-700 text-xs hover:bg-slate-50/50 dark:hover:bg-slate-700/20">
+                        <td class="py-3 px-4 font-semibold">${idx++}</td>
+                        <td class="py-3 px-4 font-medium">${item.nama}</td>
+                        <td class="py-3 px-4">${item.kelas}</td>
+                        <td class="py-3 px-4 text-emerald-600 font-bold">${item.Ringan}</td>
+                        <td class="py-3 px-4 text-amber-600 font-bold">${item.Sedang}</td>
+                        <td class="py-3 px-4 text-rose-600 font-bold">${item.Berat}</td>
+                        <td class="py-3 px-4 font-extrabold">${item.Total}</td>
+                    </tr>
+                `;
+            }
+            document.getElementById('tbodyRekapAkumulasi').innerHTML = tbodyHTML || `<tr><td colspan="7" class="text-center py-4 text-slate-400 text-xs">Tidak ada data pelanggaran</td></tr>`;
+
+            const ctx = document.getElementById('chartTrendPelanggaran').getContext('2d');
+            if (window.myChartTrend) window.myChartTrend.destroy();
+            window.myChartTrend = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                    datasets: [{
+                        label: 'Trend Pelanggaran Global',
+                        data: [12, 19, 3, 5, 2, 3, 7, 8, 4, 6, 9, 5],
+                        borderColor: '#4F8EF7',
+                        backgroundColor: 'rgba(79, 142, 247, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        function downloadLaporan(format) {
+            alert(`Fitur download laporan ke format ${format.toUpperCase()} sedang diproses.`);
+        }
+
+        async function kirimDataPelanggaran(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSimpan');
+            btn.disabled = true;
+            btn.innerText = "Menyimpan...";
+
+            const payload = {
+                action: "simpanPelanggaran",
+                tahunAjaran: document.getElementById('inputTahunAjaran').value,
+                namaGuru: document.getElementById('inputNamaGuru').value,
+                kelas: document.getElementById('inputPilihKelas').value,
+                namaSiswa: document.getElementById('inputNamaSiswa').value,
+                jenisPelanggaran: document.getElementById('inputJenisPelanggaran').value,
+                kategori: document.getElementById('inputKategori').value,
+                tindakan: document.getElementById('inputTindakan').value,
+                status: document.getElementById('inputStatus').value
+            };
+
+            try {
+                const response = await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) });
+                const result = await response.json();
+                if (result.status === "success") {
+                    alert("Data pelanggaran berhasil disimpan ke sheet Pelanggaran!");
+                    pilihMenu('Input Pelanggaran');
+                } else {
+                    alert("Gagal menyimpan: " + result.message);
+                    btn.disabled = false;
+                    btn.innerText = "Simpan Pelanggaran";
+                }
+            } catch (err) {
+                alert("Terjadi kesalahan jaringan.");
+                btn.disabled = false;
+                btn.innerText = "Simpan Pelanggaran";
+            }
+        }
+
+        async function simpanSiswaBaru(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSimpanSiswa');
+            btn.disabled = true;
+            btn.innerText = "Menyimpan...";
+
+            const payload = {
+                action: "tambahSiswa",
+                nisn: document.getElementById('inputNisn').value,
+                nama: document.getElementById('inputNamaSiswaBaru').value,
+                kelas: document.getElementById('inputKelasSiswa').value
+            };
+
+            try {
+                const response = await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) });
+                const result = await response.json();
+                if (result.status === "success") {
+                    alert("Siswa berhasil ditambahkan!");
+                    await muatDataGlobalAwal();
+                    pilihMenu('Tambah Siswa');
+                } else {
+                    alert("Gagal menyimpan siswa.");
+                    btn.disabled = false;
+                    btn.innerText = "Simpan Data Siswa";
+                }
+            } catch (err) {
+                alert("Terjadi kesalahan jaringan.");
+                btn.disabled = false;
+                btn.innerText = "Simpan Data Siswa";
+            }
+        }
+    </script>
+</body>
+</html>
