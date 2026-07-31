@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="light">
+<html lang="id" class="light scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,148 +13,481 @@
             theme: {
                 extend: {
                     colors: { navy: '#1E3A5F', secondary: '#4F8EF7', accent: '#10B981', bglight: '#F8FAFC' },
-                    fontFamily: { heading: ['"Plus Jakarta Sans"', 'sans-serif'], body: ['Inter', 'sans-serif'] }
+                    fontFamily: { 
+                        heading: ['"Plus Jakarta Sans"', 'sans-serif'], 
+                        body: ['Inter', 'sans-serif'],
+                        calibri: ['Calibri', 'sans-serif']
+                    }
                 }
             }
         }
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; }
         h1, h2, h3, h4, h5 { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .card-custom { border-radius: 16px; box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.04), 0 2px 6px -4px rgba(0, 0, 0, 0.03); transition: all 0.2s ease; }
         
-        /* Peningkatan Tampilan Menu Timbul & Efek Klik */
-        .sidebar-item { 
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(226, 232, 240, 0.6);
+        /* EFEK KOTAK TIMBUL PADA MENU UTAMA */
+        .card-custom { 
+            border-radius: 20px; 
             background-color: #FFFFFF;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 2px solid transparent;
         }
-        .dark .sidebar-item {
-            background-color: #1e293b;
-            border-color: rgba(51, 65, 85, 0.6);
+        .card-custom:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 35px -10px rgba(79, 142, 247, 0.35), 0 0 15px rgba(79, 142, 247, 0.2);
+            border-color: #4F8EF7;
         }
-        .sidebar-item:hover { 
-            background: linear-gradient(to right, rgba(79, 142, 247, 0.08), rgba(30, 58, 95, 0.05));
-            color: #2563eb;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+            font-family: 'Calibri', sans-serif;
         }
-        .sidebar-item:active {
-            transform: translateY(1px);
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #4F8EF7;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .sidebar-item.active { 
-            background: linear-gradient(135deg, #1E3A5F 0%, #0f172a 100%);
-            color: #FFFFFF;
-            border-color: transparent;
-            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.25);
-            transform: translateY(0px);
+        .nav-link.active::after {
+            width: 100%;
         }
-        .sidebar-item.active i {
-            color: #60a5fa !important;
+        .nav-link.active {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        /* EFEK TRANSISI DIPERCEPAT (0.7s) */
+        .scroll-reveal-section {
+            opacity: 0;
+            filter: blur(8px);
+            transform: scale(0.97) translateY(15px);
+            transition: filter 0.7s cubic-bezier(0.16, 1, 0.3, 1), 
+                        opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: filter, opacity, transform;
+        }
+
+        .scroll-reveal-section.revealed {
+            opacity: 1;
+            filter: blur(0px);
+            transform: scale(1) translateY(0);
         }
     </style>
 </head>
-<body class="bg-bglight dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+<body class="bg-[#10223f] text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
 
     <div class="min-h-screen flex flex-col flex-grow">
-        <!-- HEADER -->
-        <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-700 sticky top-0 z-40 shadow-xs">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <!-- HEADER & NAVBAR UTAMA -->
+        <header class="bg-[#152a4a]/95 backdrop-blur-md border-b border-slate-700/60 sticky top-0 z-40 shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                <!-- Logo & Title -->
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full bg-navy text-white flex items-center justify-center font-heading font-extrabold shadow-sm overflow-hidden border border-slate-200 flex-shrink-0">
+                    <div class="w-11 h-11 rounded-full bg-navy text-white flex items-center justify-center font-heading font-extrabold shadow-md overflow-hidden border-2 border-slate-500/40 flex-shrink-0">
                         <img src="logo AW 20.jpg" alt="Logo Al-Wildan 20" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <span style="display:none;" class="text-xs">AW</span>
                     </div>
                     <div>
-                        <h1 class="font-heading font-extrabold text-xs sm:text-base tracking-tight text-navy dark:text-white">AL-WILDAN ISLAMIC SCHOOL 20 MATARAM</h1>
-                        <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400">Jurnal Kesiswaan &bull; Sistem Layanan Terpadu Pembinaan</p>
+                        <h1 class="font-heading font-extrabold text-xs sm:text-sm tracking-wide text-white">AL-WILDAN ISLAMIC SCHOOL 20 MATARAM</h1>
+                        <p class="text-[11px] font-medium text-slate-300">Sistem Informasi Akademik Terpadu &bull; CLASSDESK</p>
                     </div>
                 </div>
-                <div class="hidden md:flex items-center space-x-4 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-700/50 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
+
+                <!-- Jam & Tanggal Widget -->
+                <div class="hidden lg:flex items-center space-x-3 text-xs font-semibold text-slate-200 bg-slate-800/60 px-3.5 py-2 rounded-xl border border-slate-700">
                     <div class="flex items-center space-x-1.5">
-                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-500"></i>
+                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-secondary"></i>
                         <span id="widgetTanggal">Memuat...</span>
                     </div>
-                    <span class="text-slate-300 dark:text-slate-600">|</span>
+                    <span class="text-slate-500">|</span>
                     <div class="flex items-center space-x-1.5">
-                        <i data-lucide="clock" class="w-3.5 h-3.5 text-indigo-500"></i>
+                        <i data-lucide="clock" class="w-3.5 h-3.5 text-secondary"></i>
                         <span id="widgetJam">00:00:00</span>
                     </div>
                 </div>
             </div>
+
+            <!-- NAVBAR MENU UTAMA (Menggunakan Font Calibri, Ukuran Kecil & Imut) -->
+            <div class="bg-[#12243e] border-t border-slate-700/50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto">
+                    <nav class="flex space-x-5 sm:space-x-7 h-11 items-center text-xs sm:text-sm font-semibold tracking-wide whitespace-nowrap font-calibri">
+                        <a href="#section-home" id="nav-home" class="nav-link active text-white py-2 cursor-pointer flex items-center gap-1.5">HOME</a>
+                        <a href="#section-visiMisi" id="nav-visiMisi" class="nav-link text-slate-300 hover:text-white py-2 cursor-pointer">VISI & MISI</a>
+                        <a href="#section-ikrarSiswa" id="nav-ikrarSiswa" class="nav-link text-slate-300 hover:text-white py-2 cursor-pointer">IKRAR SISWA</a>
+                        <a href="#section-karakteristikSiswa" id="nav-karakteristikSiswa" class="nav-link text-slate-300 hover:text-white py-2 cursor-pointer">KARAKTERISTIK SISWA</a>
+                        <a href="#section-dosDonts" id="nav-dosDonts" class="nav-link text-slate-300 hover:text-white py-2 cursor-pointer">THE DO'S & THE DONT'S</a>
+                        <a href="#section-kunciSukses" id="nav-kunciSukses" class="nav-link text-slate-300 hover:text-white py-2 cursor-pointer">5 KUNCI SUKSES</a>
+                    </nav>
+                </div>
+            </div>
         </header>
 
-        <!-- LAYOUT UTAMA -->
-        <div class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row gap-6 items-start">
+        <!-- KONTEN UTAMA -->
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
             
-            <!-- SIDEBAR -->
-            <aside class="w-full md:w-72 flex-shrink-0 space-y-4">
-                <div class="card-custom bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 p-4 space-y-2 shadow-sm">
-                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-3 pb-1">Menu Navigasi</p>
-                    
-                    <button onclick="pilihMenu('Input Pelanggaran')" id="btnMenu-Input Pelanggaran" class="sidebar-item w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 text-left">
-                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-500 flex-shrink-0"></i>
-                        <span class="truncate">Input Pelanggaran Siswa</span>
-                    </button>
-
-                    <button onclick="pilihMenu('Tambah Siswa')" id="btnMenu-Tambah Siswa" class="sidebar-item w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 text-left">
-                        <i data-lucide="user-plus" class="w-4 h-4 text-indigo-500 flex-shrink-0"></i>
-                        <span class="truncate">Tambah & Data Siswa</span>
-                    </button>
-
-                    <button onclick="pilihMenu('Master Pelanggaran')" id="btnMenu-Master Pelanggaran" class="sidebar-item w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 text-left">
-                        <i data-lucide="settings" class="w-4 h-4 text-blue-500 flex-shrink-0"></i>
-                        <span class="truncate">Master Pelanggaran</span>
-                    </button>
-
-                    <button onclick="pilihMenu('Laporan Kesiswaan')" id="btnMenu-Laporan Kesiswaan" class="sidebar-item w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 text-left">
-                        <i data-lucide="bar-chart-3" class="w-4 h-4 text-purple-500 flex-shrink-0"></i>
-                        <span class="truncate">Laporan Kesiswaan</span>
-                    </button>
-
-                    <button onclick="pilihMenu('Hapus dan Reset Data')" id="btnMenu-Hapus dan Reset Data" class="sidebar-item w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 text-left">
-                        <i data-lucide="trash-2" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
-                        <span class="truncate">Hapus & Reset</span>
-                    </button>
-                </div>
-            </aside>
-
-            <!-- KONTEN UTAMA -->
-            <main class="flex-grow w-full space-y-6 min-w-0">
-                <!-- BANNER KOMITMEN KEDISPLINAN (Warna Biru Dongker Gradasi) -->
-                <div class="card-custom bg-gradient-to-r from-blue-950 via-navy to-indigo-900 text-white p-5 sm:p-6 shadow-sm border border-slate-700/50 flex items-center space-x-4">
-                    <div class="p-3 bg-white/10 rounded-xl backdrop-blur-md text-amber-400 flex-shrink-0 shadow-inner">
-                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+            <!-- SECTION 1: HOME -->
+            <div id="section-home" class="space-y-12 pt-4">
+                <div class="space-y-3">
+                    <div class="inline-block px-3 py-1 bg-secondary/20 border border-secondary/40 rounded-full text-secondary text-[11px] font-bold tracking-wider uppercase">
+                        Jurnal Kesiswaan Terpadu
                     </div>
-                    <div class="min-w-0">
-                        <!-- Teks Kedisiplinan dengan Gradasi Biru Dongker ke Terang -->
-                        <h4 class="font-heading font-bold text-sm sm:text-base bg-gradient-to-r from-sky-200 via-blue-100 to-white bg-clip-text text-transparent tracking-tight">
-                            Komitmen Kedisiplinan & Ketertiban
-                        </h4>
-                        <p class="text-xs text-slate-300 mt-0.5 leading-relaxed font-normal">
-                            "Disiplin adalah fondasi utama dalam mencetak generasi unggul, berakhlak mulia, serta bertanggung jawab di lingkungan Al-Wildan Islamic School 20 Mataram."
-                        </p>
-                    </div>
+                    <h2 class="text-lg sm:text-2xl font-heading font-extrabold text-white tracking-tight">
+                        Ahlan wa Sahlan 👋, Selamat datang di Jurnal Kesiswaan Al-Wildan 20 Mataram
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
+                        Mencatat dengan amanah, membina dengan hikmah, dan mendampingi siswa menuju akhlak karimah dan prestasi yang berkah serta melimpah.<br>
+                        Mari bersama membangun lingkungan pendidikan yang disiplin, berkarakter, dan penuh kepedulian.
+                    </p>
                 </div>
 
-                <div id="areaKontenMenu" class="space-y-6">
-                    <div class="card-custom bg-white dark:bg-slate-800 p-10 border border-slate-200/80 dark:border-slate-700 text-center space-y-3 shadow-sm">
-                        <div class="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl mx-auto flex items-center justify-center shadow-inner">
-                            <i data-lucide="mouse-pointer-click" class="w-6 h-6"></i>
+                <!-- 4 KARTU MENU UTAMA -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-2">
+                    <div onclick="bukaFiturJurnal('Input Pelanggaran')" class="card-custom p-6 text-slate-800 cursor-pointer flex flex-col justify-between space-y-6">
+                        <div class="space-y-4">
+                            <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center shadow-inner">
+                                <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="font-heading font-bold text-base text-navy">Input Pelanggaran</h3>
+                                <p class="text-xs text-slate-500 leading-relaxed">Pencatatan pelanggaran siswa, pemilihan kategori, serta riwayat tindakan secara real-time.</p>
+                            </div>
                         </div>
-                        <div class="space-y-1">
-                            <h3 class="font-heading font-bold text-base text-navy dark:text-white">Silakan Pilih Menu di Sidebar Samping</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">Pilih salah satu menu navigasi untuk mengelola data siswa, master pelanggaran, atau melihat rekap laporan.</p>
+                        <div class="text-xs font-bold text-secondary flex items-center gap-1 group">
+                            <span>Buka Input Jurnal</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
                         </div>
                     </div>
+
+                    <div onclick="bukaFiturJurnal('Tambah Siswa')" class="card-custom p-6 text-slate-800 cursor-pointer flex flex-col justify-between space-y-6">
+                        <div class="space-y-4">
+                            <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shadow-inner">
+                                <i data-lucide="user-plus" class="w-6 h-6"></i>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="font-heading font-bold text-base text-navy">Tambah & Data Siswa</h3>
+                                <p class="text-xs text-slate-500 leading-relaxed">Manajemen penambahan siswa baru, pengecekan NISN, dan pengelompokan kelas.</p>
+                            </div>
+                        </div>
+                        <div class="text-xs font-bold text-secondary flex items-center gap-1 group">
+                            <span>Kelola Data Siswa</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                    </div>
+
+                    <div onclick="bukaFiturJurnal('Master Pelanggaran')" class="card-custom p-6 text-slate-800 cursor-pointer flex flex-col justify-between space-y-6">
+                        <div class="space-y-4">
+                            <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center shadow-inner">
+                                <i data-lucide="settings" class="w-6 h-6"></i>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="font-heading font-bold text-base text-navy">Master Pelanggaran</h3>
+                                <p class="text-xs text-slate-500 leading-relaxed">Pengaturan daftar jenis pelanggaran beserta kategori Ringan, Sedang, dan Berat.</p>
+                            </div>
+                        </div>
+                        <div class="text-xs font-bold text-secondary flex items-center gap-1 group">
+                            <span>Lihat Master</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                    </div>
+
+                    <div onclick="bukaFiturJurnal('Laporan Kesiswaan')" class="card-custom p-6 text-slate-800 cursor-pointer flex flex-col justify-between space-y-6">
+                        <div class="space-y-4">
+                            <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center shadow-inner">
+                                <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="font-heading font-bold text-base text-navy">Laporan Kesiswaan</h3>
+                                <p class="text-xs text-slate-500 leading-relaxed">Rekapitulasi akumulasi poin pelanggaran, filter pekan/bulan, dan grafik trend.</p>
+                            </div>
+                        </div>
+                        <div class="text-xs font-bold text-secondary flex items-center gap-1 group">
+                            <span>Buka Laporan</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                    </div>
                 </div>
-            </main>
-        </div>
+
+                <!-- WORKSPACE KONTEN FITUR -->
+                <div id="workspaceFiturContainer" class="hidden pt-4"></div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <!-- SECTION 2: VISI & MISI -->
+            <div id="section-visiMisi" class="space-y-6 scroll-reveal-section pt-4">
+                <div class="card-custom p-8 text-slate-800 space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h3 class="font-heading font-extrabold text-xl text-navy">Visi & Misi Al-Wildan Islamic School 20 Mataram</h3>
+                        <p class="text-xs text-slate-500">Landasan resmi pembentukan karakter dan mutu pendidikan.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-3">
+                            <h4 class="font-heading font-bold text-sm text-secondary uppercase tracking-wider">Visi</h4>
+                            <p class="text-xs text-slate-700 leading-relaxed font-medium">
+                                Terwujudnya lembaga pendidikan Islam yang berkualitas dan berbasis pada penguasaan hafalan Al-Quran, ilmu syar'iyyah dan didukung dengan penguasaan bahasa Arab.
+                            </p>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-3">
+                            <h4 class="font-heading font-bold text-sm text-secondary uppercase tracking-wider">Misi</h4>
+                            <ul class="text-xs text-slate-700 space-y-2 list-decimal pl-4 leading-relaxed">
+                                <li>Mengembangkan lembaga pendidikan dengan pelayanan prima berkualitas, berstandar mutu dengan manajemen profesional.</li>
+                                <li>Mencetak para Huffaadz Al Qur'an dan memahami ilmu syar'iyyah.</li>
+                                <li>Mengembangkan pendidikan yang berbasis bahasa Arab, matematika, dan sains dengan memanfaatkan teknologi modern dan didasarkan pada kekuatan aqidah, akhlaq dan manhaj agama salafus Sholeh.</li>
+                                <li>Mengembangkan proses pendidikan yang berorientasi masa depan dan mampu bersaing dalam dunia global.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <!-- SECTION 3: IKRAR SISWA -->
+            <div id="section-ikrarSiswa" class="space-y-6 scroll-reveal-section pt-4">
+                <div class="card-custom p-8 text-slate-800 space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h3 class="font-heading font-extrabold text-xl text-navy">Ikrar Siswa Al-Wildan Islamic School</h3>
+                        <p class="text-xs text-slate-500">Janji dan komitmen moral peserta didik.</p>
+                    </div>
+                    <div class="bg-indigo-50/50 border border-indigo-100 p-6 rounded-2xl">
+                        <ol class="space-y-3 text-xs sm:text-sm text-slate-800 font-medium list-decimal pl-5 leading-relaxed">
+                            <li>Bertakwa Kepada Allah Subhanahu wa Ta'ala.</li>
+                            <li>Taat Kepada Rasulullah Shallallahu ‘alaihi wasallam.</li>
+                            <li>Hormat Dan Bakti Kepada Kedua Orang Tua.</li>
+                            <li>Hormat Dan Patuh Kepada Guru.</li>
+                            <li>Saling Menghargai Sesama Teman.</li>
+                            <li>Menjunjung Tinggi Akhlak Dan Adab Dalam Berprilaku Sehari-Hari.</li>
+                            <li>Menolak Bullying Di Lingkungan Sekolah Dan Di Manapun.</li>
+                            <li>Menolak Dan Memerangi LGBTQ Di Lingkungan Sekolah.</li>
+                            <li>Menjaga Nama Baik Al-Wildan Islamic School Di Manapun Berada.</li>
+                            <li>Selalu Ucapkan SALAM, Bersikap Sopan Dan Santun Terhadap Tamu Maupun Orang Lain Di Sekitar Lingkungan Sekolah.</li>
+                            <li>Bertekat Memberikan Prestasi Gemilang Akademis Maupun Diniyah Bagi Diri Sendiri, Sekolah Dan Orang Tua Serta Berguna Bagi Nusa Dan Banggsa.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <!-- SECTION 4: KARAKTERISTIK SISWA -->
+            <div id="section-karakteristikSiswa" class="space-y-6 scroll-reveal-section pt-4">
+                <div class="card-custom p-8 text-slate-800 space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h3 class="font-heading font-extrabold text-xl text-navy">Karakteristik Siswa Al-Wildan (Think Before Act)</h3>
+                        <p class="text-xs text-slate-500">Prinsip harian dan pilar karakter utama peserta didik.</p>
+                    </div>
+
+                    <div class="bg-amber-50/70 border border-amber-200 p-5 rounded-2xl space-y-2">
+                        <h4 class="font-heading font-bold text-sm text-amber-900 uppercase">Think Before Act (Prinsip Harian)</h4>
+                        <p class="text-xs text-slate-700">Sebelum bertindak, tanyakan pada diri sendiri:</p>
+                        <ul class="text-xs text-slate-700 list-disc pl-4 space-y-1">
+                            <li><strong>Benarkah ini?</strong> (Jujur atau tidak?)</li>
+                            <li><strong>Baikkah ini?</strong> (Menyakiti atau tidak?)</li>
+                            <li><strong>Bermanfaatkah ini?</strong> (Ada nilai atau tidak?)</li>
+                        </ul>
+                        <p class="text-[11px] text-amber-800 font-semibold italic pt-1">Jika ragu, lebih baik ditinggalkan.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2">
+                            <span class="px-2.5 py-1 bg-navy text-white rounded-lg text-[10px] font-bold">Karakter 1</span>
+                            <h4 class="font-heading font-bold text-sm text-navy">Kuat Iman & Ibadah</h4>
+                            <p class="text-xs text-slate-600">Cinta masjid, dekat dengan Al-Qur'an, dan menjaga hati serta niat.</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2">
+                            <span class="px-2.5 py-1 bg-navy text-white rounded-lg text-[10px] font-bold">Karakter 2</span>
+                            <h4 class="font-heading font-bold text-sm text-navy">Cinta Ilmu & Berprestasi</h4>
+                            <p class="text-xs text-slate-600">Gemar belajar, berwawasan luas, pantang menyerah, dan menjadikan ilmu sebagai kebahagiaan.</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2">
+                            <span class="px-2.5 py-1 bg-navy text-white rounded-lg text-[10px] font-bold">Karakter 3</span>
+                            <h4 class="font-heading font-bold text-sm text-navy">Akhlak Mulia & Sosial</h4>
+                            <p class="text-xs text-slate-600">Jujur, berkata baik, mendoakan teman, menghormati dan peduli, serta menjauhi ghibah.</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2">
+                            <span class="px-2.5 py-1 bg-navy text-white rounded-lg text-[10px] font-bold">Karakter 4</span>
+                            <h4 class="font-heading font-bold text-sm text-navy">Mandiri & Bertanggung Jawab</h4>
+                            <p class="text-xs text-slate-600">Disiplin, percaya diri, tidak bergantung pada orang lain, serta menjaga kebersihan dan kerapihan.</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2 md:col-span-2">
+                            <span class="px-2.5 py-1 bg-navy text-white rounded-lg text-[10px] font-bold">Karakter 5</span>
+                            <h4 class="font-heading font-bold text-sm text-navy">Pemimpin & Pembawa Perubahan</h4>
+                            <p class="text-xs text-slate-600">Menjadi teladan (role model), terdepan dalam kebaikan, agent of change, dan kehadirannya dirindukan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <!-- SECTION 5: THE DO'S & THE DONT'S -->
+            <div id="section-dosDonts" class="space-y-6 scroll-reveal-section pt-4">
+                <div class="card-custom p-8 text-slate-800 space-y-8">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h3 class="font-heading font-extrabold text-xl text-navy">Campaign Daily Zero Bully &bull; SMP & SMA Al-Wildan 20 Mataram</h3>
+                        <p class="text-xs text-slate-500">Panduan lengkap perilaku terpuji (Do's) dan hal terlarang (Don't's) beserta ketentuan sanksi.</p>
+                    </div>
+
+                    <!-- JENJANG SMP -->
+                    <div class="space-y-4">
+                        <div class="bg-indigo-900 text-white px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider">
+                            Campaign Daily Zero Bully &bull; Jenjang SMP
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-5 space-y-3">
+                                <div class="font-bold text-emerald-800 text-xs flex items-center gap-1.5"><i data-lucide="check-circle-2" class="w-4 h-4"></i> THE DO'S (Hal yang Boleh Dilakukan - SMP)</div>
+                                <ul class="space-y-2 text-xs text-slate-700 list-disc pl-4 leading-relaxed">
+                                    <li>Langsung ganti topik pembicaraan atau meminta maaf jika temanmu memberikan kode/tidak nyaman dengan candaanmu.</li>
+                                    <li>Gunakan grup WhatsApp kelas hanya untuk informasi tugas, kerja kelompok, hal yang positif.</li>
+                                    <li>Hargai privasi dengan selalu meminta izin sebelum melihat, meminta atau meminjam barang.</li>
+                                    <li>Berani menegur teman jika candaan mereka ke teman yang lain sudah kelewatan.</li>
+                                    <li>Berikan apresiasi atau ucapan selamat saat ada teman sekelas menang lomba/nilai bagus.</li>
+                                    <li>Buat humor yang bersumber dari cerita lucu diri sendiri (self-deprecating humor yang sehat).</li>
+                                    <li>Katakan secara jujur dan tenang jika merasa tersinggung.</li>
+                                    <li>Dukung teman yang sedang gugup saat tampil atau presentasi di depan kelas.</li>
+                                    <li>Jaga rahasia atau cerita curhat teman yang bersifat pribadi dengan sangat rapat.</li>
+                                    <li>Mengalihkan pembicaraan secara halus jika forum mulai mengarah pada ghibah.</li>
+                                    <li>Menghargai privasi loker dan meja teman dengan tidak menyentuh tanpa izin.</li>
+                                    <li>Mengakui kesalahan lisan dan langsung meminta maaf jika menyinggung orang lain.</li>
+                                    <li>Mengembalikan barang pinjaman dalam kondisi utuh disertai ucapan terima kasih.</li>
+                                    <li>Menjaga volume suara dan tawa di area umum sekolah (perpustakaan, masjid, koridor).</li>
+                                    <li>Melaporkan indikasi perundungan fisik kepada guru BK demi keselamatan bersama.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-rose-50/60 border border-rose-200 rounded-2xl p-5 space-y-3">
+                                <div class="font-bold text-rose-800 text-xs flex items-center gap-1.5"><i data-lucide="x-circle" class="w-4 h-4"></i> THE DONT'S (Hal yang Dilarang - SMP)</div>
+                                <ul class="space-y-2 text-xs text-slate-700 list-disc pl-4 leading-relaxed">
+                                    <li>Menjadikan foto wajah aib teman sebagai stiker WhatsApp tanpa persetujuan.</li>
+                                    <li>Bercanda fisik, menarik jilbab teman, mendorong, mencekik, atau memukul pundak dengan keras.</li>
+                                    <li>Membuat status WhatsApp atau instastory pasif-agresif (sindiran) untuk memojokkan seseorang.</li>
+                                    <li>Melakukan body shaming terselubung (mengomentari jerawat, berat/tinggi badan).</li>
+                                    <li>Membuang atau menyembunyikan barang teman hingga membuat panik.</li>
+                                    <li>Menertawakan atau menyoraki teman yang sedang dihukum/ditegur ustadzah.</li>
+                                    <li>Membongkar rahasia atau curhatan pribadi teman di depan forum.</li>
+                                    <li>Mengejek logat bicara atau dialek daerah asal teman.</li>
+                                    <li>Memaksa teman memberikan lembar jawaban PR/tugas untuk dicontek.</li>
+                                    <li>Melempar tas, sepatu, buku ke tempat sulit dijangkau (atas lemari/atap).</li>
+                                    <li>Merendahkan kondisi ekonomi atau pekerjaan orang tua teman.</li>
+                                    <li>Menantang duel fisik, mengajak berkelahi, atau adu domba.</li>
+                                    <li>Menggunakan kata-kata kasar, kotor, atau tidak pantas dalam percakapan.</li>
+                                    <li>Meremehkan atau mengejek performa akademik teman yang belum lancar membaca/berbahasa.</li>
+                                    <li>Menjadikan unsur ibadah atau gerakan sholat sebagai bahan olokan.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- JENJANG SMA -->
+                    <div class="space-y-4 pt-4 border-t border-slate-200">
+                        <div class="bg-navy text-white px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider">
+                            Campaign Daily Zero Bully &bull; Jenjang SMA
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-5 space-y-3">
+                                <div class="font-bold text-emerald-800 text-xs flex items-center gap-1.5"><i data-lucide="check-circle-2" class="w-4 h-4"></i> THE DO'S (Hal yang Boleh Dilakukan - SMA)</div>
+                                <ul class="space-y-2 text-xs text-slate-700 list-disc pl-4 leading-relaxed">
+                                    <li>Menjadi role model (teladan) akhlakul karimah bagi adik-adik kelas.</li>
+                                    <li>Meminta izin yang jelas sebelum memposting foto/video wajah teman ke media sosial.</li>
+                                    <li>Menyelesaikan kesalahpahaman secara tabayyun (klarifikasi langsung secara dewasa).</li>
+                                    <li>Menjaga batasan interaksi antara ikhwan dan akhwat sesuai syariat.</li>
+                                    <li>Membentuk sistem peer-support (konselor sebaya) untuk teman menghadapi ujian.</li>
+                                    <li>Menunjukkan sikap anti-senioritas dengan menyambut adik kelas secara ramah.</li>
+                                    <li>Menghormati privasi teman dengan mengalihkan pandangan saat berbicara dengan ustadzah.</li>
+                                    <li>Menjadi Upstander (pembela korban) dengan berani menarik teman dari obrolan negatif.</li>
+                                    <li>Menyampaikan kritik/evaluasi organisasi secara objektif dan tertutup.</li>
+                                    <li>Menghargai pilihan masa depan dan jurusan kuliah teman.</li>
+                                    <li>Mengajak dan mengingatkan shalat berjamaah tepat waktu di masjid.</li>
+                                    <li>Saling berbagi informasi bermanfaat seperti beasiswa, tryout gratis, atau olimpiade.</li>
+                                    <li>Menjaga rahasia internal organisasi tanpa menjadikannya bahan gosip.</li>
+                                    <li>Menerima saran, teguran, atau koreksi perilaku dengan lapang dada.</li>
+                                    <li>Memastikan obrolan kelompok bersih dari konten pornografi atau makian.</li>
+                                    <li>Mengapresiasi keberanian teman menyampaikan opini saat diskusi/rapat.</li>
+                                    <li>Membayar iuran kas kelas tepat waktu tanpa harus ditagih kasar.</li>
+                                    <li>Menjaga nama baik Al-Wildan Islamic School 20 Mataram di ruang publik.</li>
+                                    <li>Memanfaatkan keahlian digital untuk membuat konten kampanye positif anti perundungan.</li>
+                                    <li>Mendoakan hidayah dan kesuksesan bersama untuk seluruh teman seangkatan.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-rose-50/60 border border-rose-200 rounded-2xl p-5 space-y-3">
+                                <div class="font-bold text-rose-800 text-xs flex items-center gap-1.5"><i data-lucide="x-circle" class="w-4 h-4"></i> THE DONT'S (Hal yang Dilarang - SMA)</div>
+                                <ul class="space-y-2 text-xs text-slate-700 list-disc pl-4 leading-relaxed">
+                                    <li>Menyebarkan nomor HP, riwayat chat pribadi, atau rahasia masa lalu ke media sosial.</li>
+                                    <li>Menginisiasi boikot sosial (cancel culture) atau menghasut menjauhi satu siswa.</li>
+                                    <li>Catcalling & pelecehan verbal, siulan, atau godaan tidak syar'i.</li>
+                                    <li>Senioritas beracun; memanggil adik kelas ke area sepi untuk diintrogasi/dibentak.</li>
+                                    <li>Peer pressure negatif; memaksa/mengejek teman yang menolak bolos.</li>
+                                    <li>Gaslighting saat ditegur; memutarbalikkan fakta ("kamu terlalu baperan").</li>
+                                    <li>Menonton atau merekam perkelahian/pembullyan untuk konten tanpa melerai.</li>
+                                    <li>Membuat taruhan yang mengorbankan perasaan orang lain.</li>
+                                    <li>Menyingkirkan teman dari circle karena perbedaan status sosial-ekonomi.</li>
+                                    <li>Mengintimidasi saksi pelanggaran agar tidak berani melapor ke guru BK.</li>
+                                    <li>Merusak atau menghapus file tugas/project penting milik teman.</li>
+                                    <li>Menggunakan lelucon sensitif (dark jokes) menyerang SARA atau trauma.</li>
+                                    <li>Membuat faksi/kubu eksklusif yang merendahkan siswa di luar lingkaran.</li>
+                                    <li>Menyindir guru, staf, atau kebijakan sekolah secara kasar di media sosial.</li>
+                                    <li>Menyalahgunakan jabatan organisasi untuk memberikan sanksi fisik/mental.</li>
+                                    <li>Menyentuh area tubuh sensitif teman sesama jenis dengan dalih keakraban.</li>
+                                    <li>Meremehkan kesehatan mental teman dengan ejekan "kurang iman/shalat".</li>
+                                    <li>Menagih hutang di depan umum dengan cara yang mempermalukan.</li>
+                                    <li>Memalsukan tanda tangan atau identitas teman untuk dispensasi palsu.</li>
+                                    <li>Mempertahankan ego pribadi dan menolak meminta maaf saat merugikan orang lain.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <!-- SECTION 6: 5 KUNCI SUKSES -->
+            <div id="section-kunciSukses" class="space-y-6 scroll-reveal-section pt-4 pb-12">
+                <div class="card-custom p-8 text-slate-800 space-y-6">
+                    <div class="border-b border-slate-200 pb-4">
+                        <h3 class="font-heading font-extrabold text-xl text-navy">5 Kunci Sukses Peserta Didik Al-Wildan</h3>
+                        <p class="text-xs text-slate-500">Pedoman harian untuk meraih kesuksesan dunia dan akhirat.</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-indigo-50/60 border border-indigo-100 p-5 rounded-2xl space-y-2">
+                            <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow-sm">1</span>
+                            <h4 class="font-heading font-bold text-sm text-navy">Sholat Tepat Waktu</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">Melaksanakan sholat fardhu tepat waktu secara berjamaah di masjid untuk melatih disiplin dan ketenangan.</p>
+                        </div>
+                        <div class="bg-blue-50/60 border border-blue-100 p-5 rounded-2xl space-y-2">
+                            <span class="w-8 h-8 rounded-xl bg-blue-600 text-white font-bold text-xs flex items-center justify-center shadow-sm">2</span>
+                            <h4 class="font-heading font-bold text-sm text-navy">Berbakti Kepada Orang Tua</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">Birrul Walidain; senantiasa patuh, mendoakan, dan berbuat baik sebagai kunci keberkahan hidup.</p>
+                        </div>
+                        <div class="bg-emerald-50/60 border border-emerald-100 p-5 rounded-2xl space-y-2">
+                            <span class="w-8 h-8 rounded-xl bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow-sm">3</span>
+                            <h4 class="font-heading font-bold text-sm text-navy">Rajin Membaca Al-Qur'an</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">Membaca Al-Qur'an setiap hari untuk menjernihkan hati dan menuntun arah hidup.</p>
+                        </div>
+                        <div class="bg-amber-50/60 border border-amber-100 p-5 rounded-2xl space-y-2">
+                            <span class="w-8 h-8 rounded-xl bg-amber-600 text-white font-bold text-xs flex items-center justify-center shadow-sm">4</span>
+                            <h4 class="font-heading font-bold text-sm text-navy">Menuntut Ilmu dengan Bahagia</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">Menjadikan kegiatan menuntut ilmu bukan sebagai beban, melainkan kebutuhan jiwa.</p>
+                        </div>
+                        <div class="bg-purple-50/60 border border-purple-100 p-5 rounded-2xl space-y-2 sm:col-span-2 lg:col-span-1">
+                            <span class="w-8 h-8 rounded-xl bg-purple-600 text-white font-bold text-xs flex items-center justify-center shadow-sm">5</span>
+                            <h4 class="font-heading font-bold text-sm text-navy">Terus Memperbaiki Diri</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">Menyadari bahwa kesuksesan bukan instan, tapi proses istiqamah.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
     </div>
 
+    <!-- SCRIPT LOGIKA DAN KONEKSI GOOGLE APPS SCRIPT -->
     <script>
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzuRdFSuzGVw5fDreZ_WYbaPvPHiNmbbrUwdNhQNcUmgjCXAcK9Rv6yJTH8ut3Dbu2drQ/exec";
 
@@ -166,8 +499,31 @@
         document.addEventListener("DOMContentLoaded", async () => {
             mulaiJamRealtime();
             await muatDataGlobalAwal();
+            initScrollSpy();
+            initScrollReveal();
             lucide.createIcons();
         });
+
+        // Observer animasi scroll yang lebih cepat (0.7s)
+        function initScrollReveal() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.scroll-reveal-section').forEach(section => {
+                observer.observe(section);
+            });
+        }
 
         function mulaiJamRealtime() {
             setInterval(() => {
@@ -205,161 +561,154 @@
             }
         }
 
-        function updateActiveSidebar(namaMenu) {
-            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
-            const btn = document.getElementById(`btnMenu-${namaMenu}`);
-            if (btn) btn.classList.add('active');
+        function initScrollSpy() {
+            const sections = ['home', 'visiMisi', 'ikrarSiswa', 'karakteristikSiswa', 'dosDonts', 'kunciSukses'];
+            
+            window.addEventListener('scroll', () => {
+                let scrollY = window.pageYOffset;
+                sections.forEach(sectionId => {
+                    const el = document.getElementById(`section-${sectionId}`);
+                    const navEl = document.getElementById(`nav-${sectionId}`);
+                    if (el && navEl) {
+                        const top = el.offsetTop - 150;
+                        const height = el.offsetHeight;
+                        if (scrollY >= top && scrollY < top + height) {
+                            sections.forEach(s => {
+                                document.getElementById(`nav-${s}`).classList.remove('active', 'text-white');
+                                document.getElementById(`nav-${s}`).classList.add('text-slate-300');
+                            });
+                            navEl.classList.add('active', 'text-white');
+                            navEl.classList.remove('text-slate-300');
+                        }
+                    }
+                });
+            });
         }
 
-        function tutupMenu() {
-            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
-            document.getElementById('areaKontenMenu').innerHTML = `
-                <div class="card-custom bg-white dark:bg-slate-800 p-10 border border-slate-200/80 dark:border-slate-700 text-center space-y-3 shadow-sm">
-                    <div class="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl mx-auto flex items-center justify-center shadow-inner">
-                        <i data-lucide="mouse-pointer-click" class="w-6 h-6"></i>
-                    </div>
-                    <div class="space-y-1">
-                        <h3 class="font-heading font-bold text-base text-navy dark:text-white">Silakan Pilih Menu di Sidebar Samping</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">Pilih salah satu menu navigasi untuk mengelola data siswa, master pelanggaran, atau melihat rekap laporan.</p>
-                    </div>
-                </div>
-            `;
-            lucide.createIcons();
-        }
-
-        async function pilihMenu(namaMenu) {
-            updateActiveSidebar(namaMenu);
-            const area = document.getElementById('areaKontenMenu');
+        async function bukaFiturJurnal(namaFitur) {
+            const workspace = document.getElementById('workspaceFiturContainer');
+            workspace.classList.remove('hidden');
             await muatDataGlobalAwal();
 
-            if (namaMenu === 'Input Pelanggaran') {
+            if (namaFitur === 'Input Pelanggaran') {
                 let daftarKelasUnik = [...new Set(cacheDataSiswaGlobal.map(s => s.kelas))].filter(Boolean).sort();
                 let opsiKelas = daftarKelasUnik.length > 0
                     ? daftarKelasUnik.map(k => `<option value="${k}">${k}</option>`).join('')
-                    : `<option value="">-- Tidak ada data kelas (Cek Sheet Data_Siswa) --</option>`;
+                    : `<option value="">-- Tidak ada data kelas --</option>`;
 
                 let opsiPelanggaranList = masterPelanggaranData.length > 0 
                     ? masterPelanggaranData.map(p => `<option value="${p.nama}" data-kategori="${p.kategori}">[${p.kategori}] ${p.nama}</option>`).join('')
                     : '';
 
-                area.innerHTML = `
-                    <div class="space-y-6">
-                        <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-5 card-custom border border-slate-200/80 dark:border-slate-700 shadow-sm">
+                workspace.innerHTML = `
+                    <div class="space-y-6 card-custom p-6 sm:p-8 text-slate-800 border-2 border-secondary/40 shadow-2xl">
+                        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
                             <div>
-                                <h2 class="font-heading font-extrabold text-lg text-navy dark:text-white">Form Input Pelanggaran Siswa</h2>
-                                <p class="text-xs text-slate-500">Data otomatis tersimpan ke Sheet Pelanggaran.</p>
+                                <h3 class="font-heading font-extrabold text-lg text-navy flex items-center gap-2">
+                                    <i data-lucide="alert-triangle" class="w-5 h-5 text-secondary"></i> Form Input Pelanggaran Siswa
+                                </h3>
+                                <p class="text-xs text-slate-500">Data otomatis tersimpan ke Google Sheet Kesiswaan.</p>
                             </div>
-                            <button onclick="tutupMenu()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 rounded-xl text-xs font-semibold cursor-pointer">Tutup</button>
+                            <button onclick="tutupWorkspace()" class="px-3.5 py-1.5 bg-slate-100 hover:bg-rose-100 hover:text-rose-600 text-slate-600 rounded-xl text-xs font-semibold transition-colors cursor-pointer">Tutup ✕</button>
                         </div>
-                        <form onsubmit="kirimDataPelanggaran(event)" class="card-custom bg-white dark:bg-slate-800 p-6 border border-slate-200/80 dark:border-slate-700 space-y-4">
+                        <form onsubmit="kirimDataPelanggaran(event)" class="space-y-4">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Tahun Ajaran (Otomatis)</label>
-                                    <input type="text" id="inputTahunAjaran" value="${tahunAjaranGlobal}" readonly class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 text-xs text-slate-500">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Tahun Ajaran</label>
+                                    <input type="text" id="inputTahunAjaran" value="${tahunAjaranGlobal}" readonly class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-xs text-slate-500">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Guru Pelapor *</label>
-                                    <input type="text" id="inputNamaGuru" required placeholder="Masukkan Nama Anda" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Guru Pelapor *</label>
+                                    <input type="text" id="inputNamaGuru" required placeholder="Masukkan Nama Anda" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Pilih Kelas *</label>
-                                    <select id="inputPilihKelas" required onchange="filterSiswaByKelas(this.value)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Pilih Kelas *</label>
+                                    <select id="inputPilihKelas" required onchange="filterSiswaByKelas(this.value)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs">
                                         <option value="">-- Pilih Kelas --</option>
                                         ${opsiKelas}
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Siswa *</label>
-                                    <select id="inputNamaSiswa" required disabled class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 text-xs text-slate-400">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Siswa *</label>
+                                    <select id="inputNamaSiswa" required disabled class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-xs text-slate-400">
                                         <option value="">-- Pilih Kelas Dahulu --</option>
                                     </select>
                                 </div>
                                 <div class="sm:col-span-2">
-                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Pilih / Ketik Pelanggaran *</label>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Pilih / Ketik Pelanggaran *</label>
                                     <div class="space-y-2">
-                                        <input type="text" id="cariPelanggaranInput" oninput="filterMasterPelanggaranList(this.value)" placeholder="🔍 Ketik untuk mencari pelanggaran..." class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
-                                        <select id="inputJenisPelanggaran" required size="4" onchange="pilihPelanggaranDropdown(this)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
+                                        <input type="text" id="cariPelanggaranInput" oninput="filterMasterPelanggaranList(this.value)" placeholder="🔍 Ketik untuk mencari pelanggaran..." class="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs">
+                                        <select id="inputJenisPelanggaran" required size="4" onchange="pilihPelanggaranDropdown(this)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs">
                                             ${opsiPelanggaranList}
                                         </select>
-                                        <p class="text-[11px] text-slate-400">Atau tulis manual pelanggaran baru jika belum ada pada daftar:</p>
-                                        <div class="flex flex-col sm:flex-row gap-2">
-                                            <input type="text" id="inputManualPelanggaran" placeholder="Tulis pelanggaran baru manual..." class="flex-grow px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
-                                            <select id="inputManualKategori" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs font-semibold">
-                                                <option value="Ringan">Ringan</option>
-                                                <option value="Sedang">Sedang</option>
-                                                <option value="Berat">Berat</option>
-                                            </select>
-                                            <button type="button" onclick="tambahMasterBaruManual()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer">Simpan ke Master</button>
-                                        </div>
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Kategori (Otomatis)</label>
-                                    <input type="text" id="inputKategori" readonly placeholder="Otomatis dari master" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 text-xs text-slate-500">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Kategori (Otomatis)</label>
+                                    <input type="text" id="inputKategori" readonly placeholder="Otomatis dari master" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-xs text-slate-500">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Status Penanganan *</label>
-                                    <select id="inputStatus" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs font-semibold">
-                                        <option value="In Progress" class="text-amber-600">⏳ In Progress (Belum Selesai)</option>
-                                        <option value="Resolved" class="text-emerald-600">✅ Resolved (Selesai / Ditindaklanjuti)</option>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Status Penanganan *</label>
+                                    <select id="inputStatus" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold">
+                                        <option value="In Progress">⏳ In Progress (Belum Selesai)</option>
+                                        <option value="Resolved">✅ Resolved (Selesai / Ditindaklanjuti)</option>
                                     </select>
                                 </div>
                                 <div class="sm:col-span-2">
-                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Tindakan / Keterangan *</label>
-                                    <textarea id="inputTindakan" required rows="2" placeholder="Tindakan yang diberikan (misal: Teguran lisan / Pemanggilan orang tua)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs"></textarea>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Tindakan / Keterangan *</label>
+                                    <textarea id="inputTindakan" required rows="2" placeholder="Tindakan yang diberikan..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs"></textarea>
                                 </div>
                             </div>
                             <div class="flex justify-end pt-2">
-                                <button type="submit" id="btnSimpan" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer">Simpan Pelanggaran</button>
+                                <button type="submit" id="btnSimpan" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-md">Simpan Pelanggaran</button>
                             </div>
                         </form>
                     </div>
                 `;
-            } else if (namaMenu === 'Tambah Siswa') {
+            } else if (namaFitur === 'Tambah Siswa') {
                 let daftarSiswaTableHTML = cacheDataSiswaGlobal.length > 0
                     ? cacheDataSiswaGlobal.map((s, idx) => `
-                        <tr class="border-b border-slate-100 dark:border-slate-700 text-xs hover:bg-slate-50/50 dark:hover:bg-slate-700/20">
+                        <tr class="border-b border-slate-100 text-xs hover:bg-slate-50">
                             <td class="py-2.5 px-4 font-semibold">${idx + 1}</td>
                             <td class="py-2.5 px-4">${s.nisn || '-'}</td>
                             <td class="py-2.5 px-4 font-medium">${s.nama || '-'}</td>
                             <td class="py-2.5 px-4">${s.kelas || '-'}</td>
                         </tr>
                     `).join('')
-                    : `<tr><td colspan="4" class="text-center py-4 text-slate-400 text-xs">Belum ada data siswa yang termuat.</td></tr>`;
+                    : `<tr><td colspan="4" class="text-center py-4 text-slate-400 text-xs">Belum ada data siswa.</td></tr>`;
 
-                area.innerHTML = `
-                    <div class="space-y-6">
-                        <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-5 card-custom border border-slate-200/80 dark:border-slate-700 shadow-sm">
-                            <div>
-                                <h2 class="font-heading font-extrabold text-lg text-navy dark:text-white">Manajemen Data Siswa</h2>
-                                <p class="text-xs text-slate-500">Tambah data siswa baru ke Google Sheet.</p>
-                            </div>
-                            <button onclick="tutupMenu()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 rounded-xl text-xs font-semibold cursor-pointer">Tutup</button>
+                workspace.innerHTML = `
+                    <div class="space-y-6 card-custom p-6 sm:p-8 text-slate-800 border-2 border-secondary/40 shadow-2xl">
+                        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+                            <h3 class="font-heading font-extrabold text-lg text-navy flex items-center gap-2">
+                                <i data-lucide="user-plus" class="w-5 h-5 text-secondary"></i> Manajemen Data Siswa
+                            </h3>
+                            <button onclick="tutupWorkspace()" class="px-3.5 py-1.5 bg-slate-100 hover:bg-rose-100 hover:text-rose-600 text-slate-600 rounded-xl text-xs font-semibold transition-colors cursor-pointer">Tutup ✕</button>
                         </div>
-                        <form onsubmit="simpanSiswaBaru(event)" class="card-custom bg-white dark:bg-slate-800 p-6 border border-slate-200/80 dark:border-slate-700 space-y-4">
+                        <form onsubmit="simpanSiswaBaru(event)" class="space-y-4">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">NISN *</label>
-                                    <input type="text" id="inputNisn" required placeholder="Masukkan NISN" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">NISN *</label>
+                                    <input type="text" id="inputNisn" required placeholder="Masukkan NISN" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Kelas *</label>
-                                    <input type="text" id="inputKelasSiswa" required placeholder="Contoh: 10 IPA 1" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Kelas *</label>
+                                    <input type="text" id="inputKelasSiswa" required placeholder="Contoh: 10 IPA 1" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs">
                                 </div>
                                 <div class="sm:col-span-2">
-                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap Siswa *</label>
-                                    <input type="text" id="inputNamaSiswaBaru" required placeholder="Masukkan nama lengkap" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-xs">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap Siswa *</label>
+                                    <input type="text" id="inputNamaSiswaBaru" required placeholder="Masukkan nama lengkap" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs">
                                 </div>
                             </div>
-                            <div class="flex justify-end"><button type="submit" id="btnSimpanSiswa" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer">Simpan Data Siswa</button></div>
+                            <div class="flex justify-end"><button type="submit" id="btnSimpanSiswa" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold cursor-pointer shadow-md">Simpan Data Siswa</button></div>
                         </form>
 
-                        <div class="card-custom bg-white dark:bg-slate-800 p-6 border border-slate-200/80 dark:border-slate-700 space-y-3">
-                            <h3 class="font-heading font-bold text-sm text-navy dark:text-white">Daftar Siswa Tersimpan di Server (${cacheDataSiswaGlobal.length})</h3>
-                            <div class="overflow-x-auto max-h-64">
-                                <table class="w-full text-left border-collapse min-w-[400px]">
+                        <div class="space-y-3 pt-4 border-t border-slate-200">
+                            <h4 class="font-heading font-bold text-sm text-navy">Daftar Siswa Tersimpan (${cacheDataSiswaGlobal.length})</h4>
+                            <div class="overflow-x-auto max-h-60">
+                                <table class="w-full text-left border-collapse">
                                     <thead>
-                                        <tr class="border-b border-slate-200 dark:border-slate-700 text-xs text-slate-400 font-bold uppercase">
+                                        <tr class="border-b border-slate-200 text-xs text-slate-400 font-bold uppercase">
                                             <th class="py-2 px-4">No</th>
                                             <th class="py-2 px-4">NISN</th>
                                             <th class="py-2 px-4">Nama Siswa</th>
@@ -372,97 +721,79 @@
                         </div>
                     </div>
                 `;
-            } else if (namaMenu === 'Master Pelanggaran') {
+            } else if (namaFitur === 'Master Pelanggaran') {
                 let listMasterHTML = masterPelanggaranData.length > 0 
                     ? masterPelanggaranData.map((m, idx) => `
-                        <tr class="border-b border-slate-100 dark:border-slate-700 text-xs hover:bg-slate-50/50 dark:hover:bg-slate-700/20">
+                        <tr class="border-b border-slate-100 text-xs hover:bg-slate-50">
                             <td class="py-3 px-4 font-semibold">${idx + 1}</td>
                             <td class="py-3 px-4">${m.nama}</td>
-                            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded-full font-medium ${m.kategori==='Ringan'?'bg-emerald-50 text-emerald-600':m.kategori==='Sedang'?'bg-amber-50 text-amber-600':'bg-rose-50 text-rose-600'}">${m.kategori}</span></td>
+                            <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full font-medium ${m.kategori==='Ringan'?'bg-emerald-50 text-emerald-600':m.kategori==='Sedang'?'bg-amber-50 text-amber-600':'bg-rose-50 text-rose-600'}">${m.kategori}</span></td>
                         </tr>
                     `).join('')
-                    : `<tr><td colspan="3" class="py-4 text-center text-slate-400 text-xs">Belum ada data master pelanggaran.</td></tr>`;
+                    : `<tr><td colspan="3" class="py-4 text-center text-slate-400 text-xs">Belum ada master pelanggaran.</td></tr>`;
 
-                area.innerHTML = `
-                    <div class="space-y-6">
-                        <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-5 card-custom border border-slate-200/80 dark:border-slate-700 shadow-sm">
-                            <h2 class="font-heading font-extrabold text-lg text-navy dark:text-white">Master Pelanggaran</h2>
-                            <button onclick="tutupMenu()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 rounded-xl text-xs font-semibold cursor-pointer">Tutup</button>
+                workspace.innerHTML = `
+                    <div class="space-y-6 card-custom p-6 sm:p-8 text-slate-800 border-2 border-secondary/40 shadow-2xl">
+                        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+                            <h3 class="font-heading font-extrabold text-lg text-navy flex items-center gap-2">
+                                <i data-lucide="settings" class="w-5 h-5 text-secondary"></i> Master Pelanggaran
+                            </h3>
+                            <button onclick="tutupWorkspace()" class="px-3.5 py-1.5 bg-slate-100 hover:bg-rose-100 hover:text-rose-600 text-slate-600 rounded-xl text-xs font-semibold transition-colors cursor-pointer">Tutup ✕</button>
                         </div>
-                        <div class="card-custom bg-white dark:bg-slate-800 p-6 border border-slate-200/80 dark:border-slate-700 space-y-4">
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left border-collapse min-w-[350px]">
-                                    <thead>
-                                        <tr class="border-b border-slate-200 dark:border-slate-700 text-xs text-slate-400 font-bold uppercase tracking-wider">
-                                            <th class="py-2.5 px-4">No</th>
-                                            <th class="py-2.5 px-4">Jenis Pelanggaran</th>
-                                            <th class="py-2.5 px-4">Kategori</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>${listMasterHTML}</tbody>
-                                </table>
-                            </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-200 text-xs text-slate-400 font-bold uppercase">
+                                        <th class="py-2.5 px-4">No</th>
+                                        <th class="py-2.5 px-4">Jenis Pelanggaran</th>
+                                        <th class="py-2.5 px-4">Kategori</th>
+                                    </tr>
+                                </thead>
+                                <tbody>${listMasterHTML}</tbody>
+                            </table>
                         </div>
                     </div>
                 `;
-            } else if (namaMenu === 'Laporan Kesiswaan') {
+            } else if (namaFitur === 'Laporan Kesiswaan') {
                 let daftarKelasUnik = [...new Set(cacheDataSiswaGlobal.map(s => s.kelas))].filter(Boolean).sort();
                 let opsiKelasFilter = daftarKelasUnik.map(k => `<option value="${k}">${k}</option>`).join('');
 
-                area.innerHTML = `
-                    <div class="space-y-6">
-                        <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-5 card-custom border border-slate-200/80 dark:border-slate-700 shadow-sm">
-                            <h2 class="font-heading font-extrabold text-lg text-navy dark:text-white">Portal Laporan Kesiswaan</h2>
-                            <button onclick="tutupMenu()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 rounded-xl text-xs font-semibold cursor-pointer">Tutup</button>
+                workspace.innerHTML = `
+                    <div class="space-y-6 card-custom p-6 sm:p-8 text-slate-800 border-2 border-secondary/40 shadow-2xl">
+                        <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+                            <h3 class="font-heading font-extrabold text-lg text-navy flex items-center gap-2">
+                                <i data-lucide="bar-chart-3" class="w-5 h-5 text-secondary"></i> Portal Laporan Kesiswaan
+                            </h3>
+                            <button onclick="tutupWorkspace()" class="px-3.5 py-1.5 bg-slate-100 hover:bg-rose-100 hover:text-rose-600 text-slate-600 rounded-xl text-xs font-semibold transition-colors cursor-pointer">Tutup ✕</button>
                         </div>
-
-                        <div class="card-custom bg-white dark:bg-slate-800 p-5 border border-slate-200/80 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-2xl">
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-500 mb-1">Pilih Kelas</label>
-                                <select id="filterLapKelas" onchange="updateSiswaLaporan(this.value); renderLaporanKesiswaan();" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700">
+                                <select id="filterLapKelas" onchange="updateSiswaLaporan(this.value); renderLaporanKesiswaan();" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white">
                                     <option value="">Semua Kelas</option>
                                     ${opsiKelasFilter}
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-500 mb-1">Pilih Siswa</label>
-                                <select id="filterLapSiswa" onchange="renderLaporanKesiswaan()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700">
+                                <select id="filterLapSiswa" onchange="renderLaporanKesiswaan()" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white">
                                     <option value="">Semua Siswa</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-500 mb-1">Pilih Pekan</label>
-                                <select id="filterLapPekan" onchange="renderLaporanKesiswaan()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700">
+                                <select id="filterLapPekan" onchange="renderLaporanKesiswaan()" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white">
                                     <option value="">Semua Pekan</option>
-                                    <option value="1">Pekan 1</option>
-                                    <option value="2">Pekan 2</option>
-                                    <option value="3">Pekan 3</option>
-                                    <option value="4">Pekan 4</option>
+                                    <option value="1">Pekan 1</option><option value="2">Pekan 2</option><option value="3">Pekan 3</option><option value="4">Pekan 4</option>
                                 </select>
                             </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-500 mb-1">Waktu (Bulan/Tahun)</label>
-                                <input type="month" id="filterLapBulan" onchange="renderLaporanKesiswaan()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700">
-                            </div>
                         </div>
-
-                        <div class="card-custom bg-white dark:bg-slate-800 p-6 border border-slate-200/80 dark:border-slate-700 space-y-3">
-                            <h3 class="font-heading font-bold text-sm text-navy dark:text-white">Grafik Trend Pelanggaran Global</h3>
-                            <div class="w-full h-64"><canvas id="chartTrendPelanggaran"></canvas></div>
-                        </div>
-
-                        <div class="card-custom bg-white dark:bg-slate-800 p-6 border border-slate-200/80 dark:border-slate-700 space-y-4">
-                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                                <h3 class="font-heading font-bold text-sm text-navy dark:text-white">Akumulasi Pelanggaran per Siswa</h3>
-                                <div class="flex gap-2">
-                                    <button onclick="downloadLaporan('pdf')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 transition-all cursor-pointer"><i data-lucide="file-text" class="w-3.5 h-3.5"></i> PDF</button>
-                                    <button onclick="downloadLaporan('word')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 transition-all cursor-pointer"><i data-lucide="file-down" class="w-3.5 h-3.5"></i> Word</button>
-                                </div>
-                            </div>
+                        <div class="space-y-3 pt-2">
+                            <h4 class="font-heading font-bold text-sm text-navy">Akumulasi Pelanggaran per Siswa</h4>
                             <div class="overflow-x-auto">
-                                <table class="w-full text-left border-collapse min-w-[500px]" id="tabelRekapAkumulasi">
+                                <table class="w-full text-left border-collapse">
                                     <thead>
-                                        <tr class="border-b border-slate-200 dark:border-slate-700 text-xs text-slate-400 font-bold uppercase tracking-wider">
+                                        <tr class="border-b border-slate-200 text-xs text-slate-400 font-bold uppercase">
                                             <th class="py-2.5 px-4">No</th>
                                             <th class="py-2.5 px-4">Nama Siswa</th>
                                             <th class="py-2.5 px-4">Kelas</th>
@@ -479,20 +810,14 @@
                     </div>
                 `;
                 renderLaporanKesiswaan();
-            } else if (namaMenu === 'Hapus dan Reset Data') {
-                area.innerHTML = `
-                    <div class="space-y-6">
-                        <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-5 card-custom border border-slate-200/80 dark:border-slate-700 shadow-sm">
-                            <h2 class="font-heading font-extrabold text-lg text-navy dark:text-white">Reset & Pembersihan Data</h2>
-                            <button onclick="tutupMenu()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 rounded-xl text-xs font-semibold cursor-pointer">Tutup</button>
-                        </div>
-                        <div class="card-custom bg-white dark:bg-slate-800 p-6 border border-slate-200/80 dark:border-slate-700 space-y-4">
-                            <button onclick="localStorage.clear(); alert('Cache lokal dibersihkan.');" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer">Reset Cache Browser</button>
-                        </div>
-                    </div>
-                `;
             }
+            
+            workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
             lucide.createIcons();
+        }
+
+        function tutupWorkspace() {
+            document.getElementById('workspaceFiturContainer').classList.add('hidden');
         }
 
         function filterSiswaByKelas(selectedKelas) {
@@ -506,8 +831,6 @@
             let opsi = `<option value="">-- Pilih Nama Siswa --</option>`;
             if (siswaFiltered.length > 0) {
                 opsi += siswaFiltered.map(s => `<option value="${s.nama}">${s.nama} (NISN: ${s.nisn || '-'})</option>`).join('');
-            } else {
-                opsi += `<option value="" disabled>Tidak ada siswa di kelas ini</option>`;
             }
             selectSiswa.innerHTML = opsi;
             selectSiswa.disabled = false;
@@ -522,37 +845,7 @@
         function pilihPelanggaranDropdown(selectEl) {
             const selectedOption = selectEl.options[selectEl.selectedIndex];
             if (selectedOption) {
-                const kategori = selectedOption.getAttribute('data-kategori') || '';
-                document.getElementById('inputKategori').value = kategori;
-                document.getElementById('inputManualPelanggaran').value = '';
-            }
-        }
-
-        async function tambahMasterBaruManual() {
-            const namaBaru = document.getElementById('inputManualPelanggaran').value.trim();
-            const kategoriBaru = document.getElementById('inputManualKategori').value;
-            if (!namaBaru) {
-                alert("Silakan ketik nama pelanggaran manual terlebih dahulu.");
-                return;
-            }
-
-            const payload = { action: "tambahMasterPelanggaran", nama: namaBaru, kategori: kategoriBaru };
-
-            try {
-                const response = await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) });
-                const result = await response.json();
-                if (result.status === "success") {
-                    alert("Pelanggaran baru berhasil disimpan ke MasterPelanggaran!");
-                    masterPelanggaranData.push({ nama: namaBaru, kategori: kategoriBaru });
-                    document.getElementById('inputJenisPelanggaran').innerHTML += `<option value="${namaBaru}" data-kategori="${kategoriBaru}">[${kategoriBaru}] ${namaBaru}</option>`;
-                    document.getElementById('inputJenisPelanggaran').value = namaBaru;
-                    document.getElementById('inputKategori').value = kategoriBaru;
-                    document.getElementById('inputManualPelanggaran').value = '';
-                } else {
-                    alert("Gagal menyimpan master pelanggaran.");
-                }
-            } catch (err) {
-                alert("Kesalahan jaringan.");
+                document.getElementById('inputKategori').value = selectedOption.getAttribute('data-kategori') || '';
             }
         }
 
@@ -591,7 +884,7 @@
             for (let k in rekapMap) {
                 let item = rekapMap[k];
                 tbodyHTML += `
-                    <tr class="border-b border-slate-100 dark:border-slate-700 text-xs hover:bg-slate-50/50 dark:hover:bg-slate-700/20">
+                    <tr class="border-b border-slate-100 text-xs hover:bg-slate-50">
                         <td class="py-3 px-4 font-semibold">${idx++}</td>
                         <td class="py-3 px-4 font-medium">${item.nama}</td>
                         <td class="py-3 px-4">${item.kelas}</td>
@@ -602,29 +895,8 @@
                     </tr>
                 `;
             }
-            document.getElementById('tbodyRekapAkumulasi').innerHTML = tbodyHTML || `<tr><td colspan="7" class="text-center py-4 text-slate-400 text-xs">Tidak ada data pelanggaran</td></tr>`;
-
-            const ctx = document.getElementById('chartTrendPelanggaran').getContext('2d');
-            if (window.myChartTrend) window.myChartTrend.destroy();
-            window.myChartTrend = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
-                    datasets: [{
-                        label: 'Trend Pelanggaran Global',
-                        data: [12, 19, 3, 5, 2, 3, 7, 8, 4, 6, 9, 5],
-                        borderColor: '#4F8EF7',
-                        backgroundColor: 'rgba(79, 142, 247, 0.1)',
-                        fill: true,
-                        tension: 0.3
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-        }
-
-        function downloadLaporan(format) {
-            alert(`Fitur download laporan ke format ${format.toUpperCase()} sedang diproses.`);
+            const tbodyEl = document.getElementById('tbodyRekapAkumulasi');
+            if (tbodyEl) tbodyEl.innerHTML = tbodyHTML || `<tr><td colspan="7" class="text-center py-4 text-slate-400 text-xs">Tidak ada data pelanggaran</td></tr>`;
         }
 
         async function kirimDataPelanggaran(e) {
@@ -650,7 +922,7 @@
                 const result = await response.json();
                 if (result.status === "success") {
                     alert("Data pelanggaran berhasil disimpan ke sheet Pelanggaran!");
-                    pilihMenu('Input Pelanggaran');
+                    bukaFiturJurnal('Input Pelanggaran');
                 } else {
                     alert("Gagal menyimpan: " + result.message);
                     btn.disabled = false;
@@ -682,7 +954,7 @@
                 if (result.status === "success") {
                     alert("Siswa berhasil ditambahkan!");
                     await muatDataGlobalAwal();
-                    pilihMenu('Tambah Siswa');
+                    bukaFiturJurnal('Tambah Siswa');
                 } else {
                     alert("Gagal menyimpan siswa.");
                     btn.disabled = false;
